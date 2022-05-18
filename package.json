@@ -1,0 +1,22 @@
+{
+  "name": "studyingnodejs",
+  "version": "1.0.0",
+  "description": "studying node.js with apple coding",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annkim7/studyingNodeJs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/annkim7/studyingNodeJs/issues"
+  },
+  "homepage": "https://github.com/annkim7/studyingNodeJs#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
