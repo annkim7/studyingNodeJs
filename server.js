@@ -3,9 +3,14 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
 
-app.listen(8080, function(){
-    console.log('listening on 8080');
+const MongoClient = require('mongodb').MongoClient;
+MongoClient.connect('mongodb+srv://ID:<PASSWORD>@cluster0.0wxoo.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
+    app.listen(8080, function(){
+        console.log('listening on 8080');
+    });
 });
+
+
 
 //누군가가 /pet으로 방문을 하면
 //pet 관련된 안내문을 띄워주자
