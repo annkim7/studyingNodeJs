@@ -54,3 +54,19 @@ app.post('/add', function(요청, 응답){
 //이때 post라는 이름을 가진 collection에 두개 데이터를 저장하기
 //{ 제목 : '어쩌구', 날짜 : '어쩌구' }
 
+app.post('/add', function(요청, 응답){
+    응답.send('전송완료');
+    console.log(요청.body);
+    //DB에 저장해주세요
+    app.listen(8080, function(){
+        if(에러) return console.log(에러)
+
+        db = client.db('todoapp');
+
+        db.collection('post').insertOne({ 이름 : 'John', 나이 : 20, _id: 100 }, function(에러, 결과){
+            console.log('저장완료');
+        });
+
+        console.log('listening on 8080');
+    });
+});
