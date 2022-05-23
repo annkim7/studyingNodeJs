@@ -2,11 +2,11 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : true }));
-
 const MongoClient = require('mongodb').MongoClient;
+app.set('view engine', 'ejs');
 
 var db;
-MongoClient.connect('mongodb+srv://id:<password>@cluster0.0wxoo.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
+MongoClient.connect('mongodb+srv://id:password@cluster0.0wxoo.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
     //연결되면 할일
     app.listen(8080, function(){
         if(에러) return console.log(에러)
@@ -43,30 +43,22 @@ app.get('/write', function(요청, 응답){
 
 app.post('/add', function(요청, 응답){
     응답.send('전송완료');
-    console.log(요청.body);
+    console.log(요청.body.date);
+    console.log(요청.body.title);
     //DB에 저장해주세요
-
-});
-
-//과제
-//어떤 사람이 /add 경로로 POST 요청을 하면...
-//데이터 2개(날짜, 제목)를 보내주는데,
-//이때 post라는 이름을 가진 collection에 두개 데이터를 저장하기
-//{ 제목 : '어쩌구', 날짜 : '어쩌구' }
-
-app.post('/add', function(요청, 응답){
-    응답.send('전송완료');
-    console.log(요청.body);
-    //DB에 저장해주세요
-    app.listen(8080, function(){
-        if(에러) return console.log(에러)
-
-        db = client.db('todoapp');
-
-        db.collection('post').insertOne({ 이름 : 'John', 나이 : 20, _id: 100 }, function(에러, 결과){
-            console.log('저장완료');
-        });
-
-        console.log('listening on 8080');
+    //어떤 사람이 /add 경로로 POST 요청을 하면...
+    //데이터 2개(날짜, 제목)를 보내주는데,
+    //이때 post라는 이름을 가진 collection에 두개 데이터를 저장하기
+    //{ 제목 : '어쩌구', 날짜 : '어쩌구' }
+    db.collection('post').insertOne({ 제목 : 요청.body.title, 날짜 : 요청.body.date }, function(에러, 결과){
+        console.log('저장완료');
     });
+
 });
+
+///list로 GET요청으로 접속하면
+//실제 DB에 저장된 데이터들로 예쁘게 꾸며진 HTML을 보여줌
+app.get('/list', function(요청, 응답){
+    응답.render('list.ejs');
+});
+
