@@ -13,9 +13,9 @@ MongoClient.connect('mongodb+srv://id:password@cluster0.0wxoo.mongodb.net/?retry
 
         db = client.db('todoapp');
 
-        db.collection('post').insertOne({ 이름 : 'John', 나이 : 20, _id: 100 }, function(에러, 결과){
-            console.log('저장완료');
-        });
+        // db.collection('post').insertOne({ 이름 : 'John', 나이 : 20, _id: 100 }, function(에러, 결과){
+        //     console.log('저장완료');
+        // });
 
         console.log('listening on 8080');
     });
@@ -50,15 +50,37 @@ app.post('/add', function(요청, 응답){
     //데이터 2개(날짜, 제목)를 보내주는데,
     //이때 post라는 이름을 가진 collection에 두개 데이터를 저장하기
     //{ 제목 : '어쩌구', 날짜 : '어쩌구' }
-    db.collection('post').insertOne({ 제목 : 요청.body.title, 날짜 : 요청.body.date }, function(에러, 결과){
-        console.log('저장완료');
+    db.collection('counter').findOne({ name : '개시물갯수' }, function(에러, 결과){
+        console.log(결과.totalPost);
+        var 총게시물갯수 = 결과.totalPost;
+
+        db.collection('post').insertOne({ _id : 총게시물갯수 + 1, 제목 : 요청.body.title, 날짜 : 요청.body.date }, function(에러, 결과){
+            console.log('저장완료');
+            //counter라는 콜렉션에 있는 totalPost라는 항목도 1 증가시켜야함(수정)
+            db.collection('counter').updateOne({name : '개시물갯수'}, { $inc : {totalPost : 1} }, function(에러, 결과){
+                if(에러){ return console.log(에러) }
+            });
+        });
+
+        
     });
+    
 
 });
 
 ///list로 GET요청으로 접속하면
 //실제 DB에 저장된 데이터들로 예쁘게 꾸며진 HTML을 보여줌
 app.get('/list', function(요청, 응답){
-    응답.render('list.ejs');
+    //디비에 저장된 post라는 collection안의 모든 데이터를 꺼내주세요
+    db.collection('post').find().toArray(function(에러, 결과){
+        console.log(결과);
+        응답.render('list.ejs', { posts : 결과 });
+    });
+
+    
+    
 });
 
+app.delete('/delete', function(요청, 응답){
+    console.log(요청.body);
+})
