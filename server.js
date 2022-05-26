@@ -115,6 +115,75 @@ app.get('/edit/:id', function(요청, 응답){
         console.log(결과);
         응답.render('edit.ejs', { post : 결과 });
     });
-
-    
 })
+
+app.put('/edit', function(요청, 응답){
+    //폼에 담긴 제목데이터, 날짜데이터를 가지고
+    //db.collection 에다가 업데이트함
+    db.collection('post').updateOne({ _id : parseInt(요청.body.id) },{ $set : { 제목: 요청.body.title, 날짜: 요청.body.date } }, function(에러, 결과){
+        console.log('수정완료');
+        응답.redirect('/list')
+    });
+});
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+
+app.use(session({ secret : '비밀코드', resave : true, saveUninitialized : false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get('/login', function(요청, 응답){
+    응답.render('login.ejs');
+});
+app.post('/login', passport.authenticate('local', {
+    failureRedirect : '/fail'
+}), function(요청, 응답){
+    응답.redirect('/')
+});
+
+app.get('/mypage', 로그인했니, function(요청, 응답){
+    console.log(요청.user);
+    응답.render('mypage.ejs', { 사용자 : 요청.user });
+});
+
+function 로그인했니(요청, 응답, next){
+    if(요청.user){
+        next()
+    }else{
+        응답.send('로그인안하셨는데요?');
+    }
+}
+
+passport.use(new LocalStrategy({
+    usernameField: 'id',
+    passwordField: 'pw',
+    session: true,
+    passReqToCallback: false,
+  }, function (입력한아이디, 입력한비번, done) {
+    //console.log(입력한아이디, 입력한비번);
+    db.collection('login').findOne({ id: 입력한아이디 }, function (에러, 결과) {
+      if (에러) return done(에러)
+  
+      if (!결과) return done(null, false, { message: '존재하지않는 아이디요' })
+      if (입력한비번 == 결과.pw) {
+        return done(null, 결과)
+      } else {
+        return done(null, false, { message: '비번틀렸어요' })
+      }
+    })
+  }));
+
+  passport.serializeUser(function (user, done) {
+    done(null, user.id)
+  });
+  
+  passport.deserializeUser(function (아이디, done) {
+      //디비에서 위에있는 user.id로 유저를 찾은 뒤에 유저정보를
+      db.collection('login').findOne({ id : 아이디 }, function(에러, 결과){
+        //done(null, {요기에 넣음})
+        done(null, 결과)
+      })
+      
+  }); 
