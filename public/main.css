@@ -1,3 +1,23 @@
 h4{
     font-weight: 900;
 }
+
+/*sticky*/
+
+/*
+<style>
+  .wrap{height:500px; overflow:hidden; overflow-y:scroll;}
+  .inner{height:100px; background:skyblue;}
+  .inner2{height:100px; background:#0f9d58;}
+  .box{position:sticky; top:10px; left:10px; width:50px; height:50px; background:#000;}
+</style>
+<body>
+  <div class="wrap">
+    <div class="inner">
+      <div class="box"></div>
+    </div>
+    <div class="inner2"></div>
+  </div>
+</body>
+
+*/
