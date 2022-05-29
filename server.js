@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -9,10 +11,11 @@ app.set('view engine', 'ejs');
 
 app.use('/public', express.static('public'));
 
+
 var db;
-MongoClient.connect('mongodb+srv://id:password@cluster0.0wxoo.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
+MongoClient.connect(process.env.DB_URL, function(에러, client){
     //연결되면 할일
-    app.listen(8080, function(){
+    app.listen(process.env.PORT, function(){
         if(에러) return console.log(에러)
 
         db = client.db('todoapp');

@@ -4,6 +4,7 @@ node_modules
 gsap-bonus.tgz
 
 # local env files
+.env
 .env.local
 .env.*.local
 
