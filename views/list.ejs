@@ -18,8 +18,8 @@
       <h4 class="ml-2 my-3 text-center">서버에서 가져온 할 일 리스트</h4>
 
       <div class="container input-group mb-2">
-        <input class="form-control">
-        <button class="input-group-append btn btn-danger">검색</button>
+        <input class="form-control" id="search-input">
+        <button class="input-group-append btn btn-danger" id="search">검색</button>
       </div>
 
       <div class="">
@@ -55,7 +55,12 @@
           });
         })
 
-        
+        //localhost:8080/list?데이터이름=데이터값
+        $('#search').click(function(){
+          //window.location.replace('/search?이름=값')
+          var 입력한값 = $('#search-input').val();
+          window.location.replace('/search?value=' + 입력한값)
+        })
       </script>
     <!-- Optional JavaScript; choose one of the two! -->
 
